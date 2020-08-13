@@ -33,13 +33,22 @@ func main() {
 
 func initLogger() {
 	format := logging.MustStringFormatter(
-		`%{color}%{time:15:04:05.000} %{shortfile} ▶ %{level} %{color:reset} %{message}`,
+		`%{color}%{time:15:04:05.000} %{level} ▶ %{message} %{color:reset}`,
 	)
+	level := logging.NOTICE
+
+	// format := logging.MustStringFormatter(
+	// 	`%{color}%{time:15:04:05.000} %{shortfile} ▶ %{level} %{color:reset} %{message}`,
+	// )
+	// level := logging.DEBUG
+
 	backend := logging.NewLogBackend(os.Stderr, "", 0)
 	formatedBackend := logging.NewBackendFormatter(backend, format)
 	leveledBackend := logging.AddModuleLevel(formatedBackend)
-	// leveledBackend.SetLevel(logging.NOTICE, "")
+	leveledBackend.SetLevel(level, "")
 
 	// Set the backends to be used.
 	logging.SetBackend(leveledBackend)
+
+	log.Debug("testing this shit")
 }
