@@ -16,6 +16,7 @@ type RepoManager interface {
 	GetAll() map[string]Command
 	GetTypes() map[string][]string
 	Add(string, Command)
+	Del(string)
 }
 
 // Command struct
@@ -50,6 +51,12 @@ func New(log *logging.Logger) *Repo {
 				Args:        []string{},
 				Description: "Add or update a command. To update an existing command enter the name when asked",
 			},
+			"del": Command{
+				Alias:       "",
+				Type:        "del",
+				Args:        []string{},
+				Description: "Remove a recorded command",
+			},
 		},
 			Types: map[string][]string{
 				"application": {"", "a", "A", "app", "application", "Application"},
@@ -72,6 +79,12 @@ func New(log *logging.Logger) *Repo {
 				Type:        "add",
 				Args:        []string{},
 				Description: "Add or update a command. To update an existing command enter the name when asked",
+			},
+			"del": Command{
+				Alias:       "",
+				Type:        "del",
+				Args:        []string{},
+				Description: "Remove a recorded command",
 			},
 		},
 			Types: map[string][]string{
@@ -100,4 +113,9 @@ func (r *Repo) GetTypes() map[string][]string {
 // Add Command
 func (r *Repo) Add(name string, cmd Command) {
 	r.Repo[name] = cmd
+}
+
+// Del Command
+func (r *Repo) Del(name string) {
+	delete(r.Repo, name)
 }
