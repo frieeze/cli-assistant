@@ -2,7 +2,7 @@
 
 CLI Assistant is a command line application that allow to create and execute commands
 
-## Add command
+## Add
 `add` command is used to register a new command. Notice it will overrite the command if the `Command Name` already exist.
 
 There is 2 types of commands : `application` and `browser`.
@@ -19,5 +19,5 @@ The assistant will ask you a few informations to build a new command :
 -   `Command Args`  : All your command arguments (ex: for `ls -la /home` enter `-la /home`). Useless if `browser`
 -   `Command Description`   : Description of the new command
 
-## Remove command
+## Remove
 `del` removes a registered command.
