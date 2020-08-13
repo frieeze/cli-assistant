@@ -8,7 +8,7 @@ import (
 )
 
 // Command file name
-var CommandFileName = "commands.json"
+var commandFileName = "commands.json"
 
 // RepoManager interface
 type RepoManager interface {
@@ -17,6 +17,7 @@ type RepoManager interface {
 	GetTypes() map[string][]string
 	Add(string, Command)
 	Del(string)
+	Save(*logging.Logger)
 }
 
 // Command struct
@@ -35,7 +36,7 @@ type Repo struct {
 
 // New Repo
 func New(log *logging.Logger) *Repo {
-	file, err := ioutil.ReadFile(CommandFileName)
+	file, err := ioutil.ReadFile(commandFileName)
 	if err != nil {
 		log.Error(err)
 		return &Repo{Repo: map[string]Command{
@@ -118,4 +119,20 @@ func (r *Repo) Add(name string, cmd Command) {
 // Del Command
 func (r *Repo) Del(name string) {
 	delete(r.Repo, name)
+}
+
+// Save repo to file
+func (r *Repo) Save(log *logging.Logger) {
+	file, err := json.MarshalIndent(r, "", " ")
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	err = ioutil.WriteFile(commandFileName, file, 0644)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	log.Debug("Commands saved successfully")
+
 }

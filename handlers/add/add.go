@@ -3,9 +3,7 @@ package add
 import (
 	"bufio"
 	"cli-assistant/cmdlist"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -23,13 +21,13 @@ func Add(log *logging.Logger, cmds cmdlist.RepoManager) {
 		log.Warningf("Command type unknown: %s\n", input)
 		return
 	}
-	cmdAlias := getInput("	Command alias: ")
+	cmdAlias := getInput("	Command Alias: ")
 	if cmdAlias == "" {
 		log.Errorf("No alias \n")
 		return
 	}
 	cmdArgs := strings.Fields(getInput("	Command Args: "))
-	cmdDescription := getInput("	Command description: ")
+	cmdDescription := getInput("	Command Description: ")
 	command := cmdlist.Command{
 		Alias:       cmdAlias,
 		Type:        cmdType,
@@ -38,24 +36,8 @@ func Add(log *logging.Logger, cmds cmdlist.RepoManager) {
 	}
 	cmds.Add(cmdName, command)
 	log.Noticef("Command '%s' successfully added/updated", cmdName)
-	go saveCommands(log, cmds)
+	go cmds.Save(log)
 }
-
-func saveCommands(log *logging.Logger, cmds cmdlist.RepoManager) {
-	file, err := json.MarshalIndent(cmds, "", " ")
-	if err != nil {
-		log.Error(err)
-		return
-	}
-	err = ioutil.WriteFile(cmdlist.CommandFileName, file, 0644)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-	log.Debug("Commands saved successfully")
-
-}
-
 func getInput(display string) string {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Printf(display)

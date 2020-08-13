@@ -26,6 +26,7 @@ func Del(log *logging.Logger, cmds cmdlist.RepoManager) {
 	if confirmation == "y" {
 		cmds.Del(cmdName)
 		log.Noticef("Command %s has been removed", cmdName)
+		go cmds.Save(log)
 	}
 }
 
